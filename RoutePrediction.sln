@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geodesy", "Geodesy\Geodesy\Geodesy.csproj", "{5A302B4D-27B5-4AB4-931E-D7D58E50D6F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationClusteringAlgorithm", "LocationClusteringAlgorithm\LocationClusteringAlgorithm.csproj", "{F8C97D57-1D9F-4D3C-870B-5E048BBC22A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutePredictionAlgorithm", "RoutePredictionAlgorithm\RoutePredictionAlgorithm.csproj", "{0C36E658-3DE1-435F-B5D1-F5E55E734B0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutePredictionTest", "RoutePredictionTest\RoutePredictionTest.csproj", "{3667FA23-EEED-4387-BAA0-46830DF72B55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A302B4D-27B5-4AB4-931E-D7D58E50D6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A302B4D-27B5-4AB4-931E-D7D58E50D6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A302B4D-27B5-4AB4-931E-D7D58E50D6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A302B4D-27B5-4AB4-931E-D7D58E50D6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8C97D57-1D9F-4D3C-870B-5E048BBC22A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C97D57-1D9F-4D3C-870B-5E048BBC22A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8C97D57-1D9F-4D3C-870B-5E048BBC22A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C97D57-1D9F-4D3C-870B-5E048BBC22A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C36E658-3DE1-435F-B5D1-F5E55E734B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C36E658-3DE1-435F-B5D1-F5E55E734B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C36E658-3DE1-435F-B5D1-F5E55E734B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C36E658-3DE1-435F-B5D1-F5E55E734B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3667FA23-EEED-4387-BAA0-46830DF72B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3667FA23-EEED-4387-BAA0-46830DF72B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3667FA23-EEED-4387-BAA0-46830DF72B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3667FA23-EEED-4387-BAA0-46830DF72B55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
