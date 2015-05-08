@@ -19,6 +19,7 @@ The solution contains three projects:
 3. a test demonstrating how the prediction algorithm can be used
 
 Dependencies: The clustering algorithm uses the geographical projections which are implemented the the Geodesy library [http://github.com/juergenpf/Geodesy](http://github.com/juergenpf/Geodesy) by Jürgen Pfeifer [https://github.com/juergenpf](https://github.com/juergenpf). 
+just add https://home.familiepfeifer.de/nuFeed/nuget as package source ( TOOLS -> NuGet Package Manager -> Package Manager Settings -> Package Sources )
 
 
 **Implementation details**
