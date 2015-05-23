@@ -38,28 +38,39 @@ namespace RoutePredictionAlgorithm
 
         public RoutePredictionValidationResult TrainAndValidate(IEnumerable<TripSummary> tripSummaries, double trainingSplit)
         {
+            List<TripSummary> trainingSet = new List<TripSummary>();
+            List<TripSummary> validationSet = new List<TripSummary>();
+            Random split = new Random();
+
+            foreach (var trip in tripSummaries)
+            {
+                if (split.NextDouble() <= trainingSplit)
+                {
+                    trainingSet.Add(trip);
+                }
+                else
+                {
+                    validationSet.Add(trip);
+                }
+            }
+            return TrainAndValidate(trainingSet, validationSet);
+        }
+        public RoutePredictionValidationResult TrainAndValidate(IEnumerable<TripSummary> trainingTrips, IEnumerable<TripSummary> validationTrips)
+        {
             // nulling the existing clusters to load a new table
             endLocationRoot = null;
             startLocationRoot = null;
             RoutePredictionValidationResult result = new RoutePredictionValidationResult();
-            List<TripSummary> validationSet = new List<TripSummary>();
-            Random split = new Random();
 
             try
             {
-                foreach (var trip in tripSummaries)
+                foreach (var trip in trainingTrips)
                 {
-                    if (split.NextDouble() <= trainingSplit)
-                    {
-                        result.NrOfTrainingSessions++;
-                        AddTripSummary(trip);
-                    }
-                    else
-                    {
-                        validationSet.Add(trip);
-                    }
+                    AddTripSummary(trip);
                 }
-                foreach (var validationItem in validationSet)
+                result.NrOfTrainingSessions = trainingTrips.Count();
+
+                foreach (var validationItem in validationTrips)
                 {
                     result.Validations.Add(ValidateRoutePrediction(validationItem));
                 }
