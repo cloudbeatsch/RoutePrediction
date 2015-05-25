@@ -12,7 +12,6 @@ namespace RoutePredictionTest
 {
     class RoutePredictionTest
     {
-        private SphericalMercatorProjection geoTransform; 
         private List<string> drivers;
         List<TripSummary> trips;
 
@@ -20,7 +19,6 @@ namespace RoutePredictionTest
         {
             drivers = new List<string>();
             trips = LoadTrips(drivers);
-            geoTransform = new SphericalMercatorProjection();
         }
 
         private List<TripSummary> LoadTrips(List<String> drivers)
@@ -60,17 +58,6 @@ namespace RoutePredictionTest
             return trips;
         }
 
-        private long GetTripDistance(RoutePredictionValidation validation)
-        {
-            double startX = geoTransform.LongitudeToX(validation.StartLon);
-            double endX = geoTransform.LongitudeToX(validation.ActualEndLon);
-            double startY = geoTransform.LatitudeToY(validation.StartLat);
-            double endY = geoTransform.LatitudeToY(validation.ActualEndLat);
-            return (long)Math.Sqrt(
-                Math.Pow(Math.Abs(startX - endX), 2) +
-                Math.Pow(Math.Abs(startY - endY), 2));
-        }
-
         public void PredictEndLocation()
         {
             foreach (var driver in drivers)
@@ -103,79 +90,43 @@ namespace RoutePredictionTest
         public void TrainAndValidate()
         {
             var clusterSizes = new int[] { 10, 100, 150, 200, 250, 300, 400, 500, 750, 1000, 2000 };
+            CSVWriter csvWriter = new CSVWriter(@"..\..\testdata\validations.csv", ";");
+
+            Console.WriteLine("Writing validation results to validations.csv");
 
             foreach (var driver in drivers)
             {
                 var currentTrips = trips.Where(t => t.DriverId.Equals(driver));
 
-                List<TripSummary> trainingSet = new List<TripSummary>();
-                List<TripSummary> validationSet = new List<TripSummary>();
-                Random split = new Random();
-
-                foreach (var trip in currentTrips)
+                for (int i = 1; i < currentTrips.Count() - 1; i++)
                 {
-                    if (split.NextDouble() <= 0.6)
+
+                    List<TripSummary> trainingSet = new List<TripSummary>();
+                    List<TripSummary> validationSet = new List<TripSummary>();
+
+                    int j = 0;
+                    foreach (var trip in currentTrips)
                     {
-                        trainingSet.Add(trip);
-                    }
-                    else
-                    {
-                        validationSet.Add(trip);
-                    }
-                }
-                Console.Write("driver: " + driver);
-                Console.Write("\ttraining/validation trips: " + trainingSet.Count());
-                Console.WriteLine("/" + validationSet.Count());
-
-                foreach (var clusterSize in clusterSizes)
-                {
-                    RoutePrediction routePrediction = new RoutePrediction(clusterSize);
-
-                    RoutePredictionValidationResult result = routePrediction.TrainAndValidate(trainingSet, validationSet);
-
-                    int within100m = 0;
-                    int within200m = 0;
-                    int within500m = 0;
-                    int within1000m = 0;
-                    int within2000m = 0;
-                    long totalTripDistance = 0;
-
-                    foreach (var validation in result.Validations)
-                    {
-                        totalTripDistance += GetTripDistance(validation);
-                        if (validation.PredictionAccuracyInMeter < 2000)
+                        if (j++<i)
                         {
-                            within2000m++;
-                            if (validation.PredictionAccuracyInMeter < 1000)
-                            {
-                                within1000m++;
-                                if (validation.PredictionAccuracyInMeter < 500)
-                                {
-                                    within500m++;
-                                    if (validation.PredictionAccuracyInMeter < 200)
-                                    {
-                                        within200m++;
-                                        if (validation.PredictionAccuracyInMeter < 100)
-                                        {
-                                            within100m++;
-                                        }
-                                    }
-                                }
-                            }
+                            trainingSet.Add(trip);
+                        }
+                        else
+                        {
+                            validationSet.Add(trip);
                         }
                     }
 
-                    Console.Write("cluster size: " + clusterSize);
-                    Console.Write("\tmean trip dist " + totalTripDistance / result.Validations.Count + "m");
-                    Console.Write("\t predictions within 100m/200m/500m/1000m/2000m: ");
-                    Console.Write((100 * within100m / result.Validations.Count) + "%/");
-                    Console.Write((100 * within200m / result.Validations.Count) + "%/");
-                    Console.Write((100 * within500m / result.Validations.Count) + "%/");
-                    Console.Write((100 * within1000m / result.Validations.Count) + "%/");
-                    Console.WriteLine((100 * within2000m / result.Validations.Count) + "%");
+                    foreach (var clusterSize in clusterSizes)
+                    {
+                        RoutePrediction routePrediction = new RoutePrediction(clusterSize);
+
+                        RoutePredictionValidationResult result = routePrediction.TrainAndValidate(trainingSet, validationSet);
+                        csvWriter.WriteRow(driver, clusterSize, trainingSet.Count(), validationSet.Count(), result.Validations);
+                    }
                 }
-                Console.WriteLine();
             }
+            Console.WriteLine("done");
         }
     }
 }
